@@ -1,0 +1,24 @@
+# https://taskfile.dev
+
+version: "3"
+
+vars:
+  APP_NAME: transport
+  BIN_DIR: /usr/local/bin
+
+tasks:
+  build:
+    desc: Build the project
+    cmds:
+      - mkdir -p dist
+      - go build -o dist/{{.APP_NAME}} main.go
+    silent: true
+
+  install-mac:
+    desc: Install the project on macOS
+    deps:
+      - build
+    cmds:
+      - echo "Installing on macOS"
+      - cp dist/{{.APP_NAME}} {{.BIN_DIR}}
+    silent: false

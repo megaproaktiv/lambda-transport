@@ -1,0 +1,20 @@
+config:
+  dev:
+    source:
+      profile: dev-profile
+      region: eu-central-1
+      lambda: demo
+    target:
+      profile: test-profile
+      region: eu-central-1
+      lambda: demo
+
+  test:
+    source:
+      profile: dev-profile
+      region: eu-central-1
+      lambda: demo
+    target:
+      profile: prod-profile
+      region: eu-central-1
+      lambda: demo

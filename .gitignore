@@ -2,3 +2,4 @@
 dist
 downloads/*.zip
 .DS_Store
+.vscode/launch.json

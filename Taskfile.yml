@@ -7,6 +7,10 @@ vars:
   BIN_DIR: /usr/local/bin
 
 tasks:
+  test:
+    desc: Run tests
+    cmds:
+      - go test ./... -v
   build:
     desc: Build the project
     cmds:

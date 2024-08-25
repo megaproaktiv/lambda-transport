@@ -12,11 +12,7 @@ import (
 var SourceClient *lambda.Client
 var TargetClient *lambda.Client
 
-// ###Todo use configuration file
-// Use configuration from ssm parameter store
-// "predev" => transport to dev
-// "dev" => transport to test
-// "test" => transport to prod
+const downloadPath = "./downloads"
 
 func DownLoadSourceLambdaCode(client *lambda.Client, functionName string) error {
 	log := Logger

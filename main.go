@@ -9,6 +9,8 @@ import (
 	mylambda "github.com/tecracer/lambda-transport/lambda"
 )
 
+const NO_STAGE = 1
+
 var Logger *slog.Logger
 
 const (
@@ -18,7 +20,12 @@ const (
 	LevelError = slog.Level(8)
 )
 
-const NO_STAGE = 1
+func init() {
+	// LOGGER
+	handler := slog.NewTextHandler(os.Stdout,
+		&slog.HandlerOptions{Level: LevelInfo})
+	Logger = slog.New(handler)
+}
 
 func main() {
 	stagep := flag.String("stage", "", "define the application stage")
@@ -37,8 +44,14 @@ func main() {
 		os.Exit(NO_STAGE)
 	}
 	stage := *stagep
-	// // Configuration
 
+	//Verbose
+	if *verboseFlag {
+		SetLogLevelDebug()
+		mylambda.SetLogLevelDebug()
+	}
+
+	//Configuration
 	configfile := ".transport/config.yml"
 	if *verboseFlag {
 		fmt.Println("Using config file: ", configfile)
@@ -46,6 +59,18 @@ func main() {
 	cfg, err := mylambda.ReadConfig(configfile)
 	if err != nil {
 		Logger.Error("Error reading configuration file, here is why", "error", err, "filename", configfile)
+	}
+	mylambda.Cfg = cfg
+	// Search stage in configuration
+	// End with error if stage is not found
+	if _, ok := cfg.Cfg[stage]; !ok {
+		Logger.Error("Stage not found in configuration file", "stage", stage)
+		os.Exit(1)
+	}
+	Logger.Debug("Stage found in configuration file", "stage", stage)
+	err = mylambda.Configure(stage)
+	if err != nil {
+		Logger.Error("Error configuring", "error", err)
 	}
 
 	// download source lambda code
@@ -76,4 +101,10 @@ Usage:
 example: ./lambda-transport -stage dev
   this would use the configuration for the dev stage.
   `)
+}
+
+func SetLogLevelDebug() {
+	handlerDebug := slog.NewTextHandler(os.Stdout,
+		&slog.HandlerOptions{Level: LevelDebug})
+	Logger = slog.New(handlerDebug)
 }

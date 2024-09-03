@@ -87,7 +87,7 @@ func main() {
 	if *verboseFlag {
 		fmt.Println("Target Lambda Name: ", targetLambdaName)
 	}
-	mylambda.UploadTargetLambdaCode(mylambda.TargetClient, targetLambdaName)
+	mylambda.UploadTargetLambdaCode(mylambda.TargetClient, targetLambdaName, sourceLambdaName)
 }
 
 func displayHelpMessage() {

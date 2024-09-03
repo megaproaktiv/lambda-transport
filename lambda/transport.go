@@ -49,10 +49,10 @@ func DownLoadSourceLambdaCode(client *lambda.Client, functionName string) error 
 	return nil
 }
 
-func UploadTargetLambdaCode(client *lambda.Client, functionName string) error {
+func UploadTargetLambdaCode(client *lambda.Client, functionName string, sourceName string) error {
 	log := Logger
 	// Read the ZIP file
-	fileToUpload, err := os.ReadFile(filepath.Join(downloadPath, functionName+".zip"))
+	fileToUpload, err := os.ReadFile(filepath.Join(downloadPath, sourceName+".zip"))
 	if err != nil {
 		log.Error("Error opening the ZIP file:", "error", err)
 		return err
